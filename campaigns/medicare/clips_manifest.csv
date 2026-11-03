@@ -1,0 +1,106 @@
+clip_name,clip_file,clip_type,topic_keywords
+Introduction_Pitch_V1,clips/pitches/Introduction_Pitch_V1.mp3,script,
+Introduction_Pitch_V2,clips/pitches/Introduction_Pitch_V2.mp3,script,
+Introduction_Pitch_V3,clips/pitches/Introduction_Pitch_V3.mp3,script,
+Age_Ask_V1,clips/pitches/Age_Ask_V1.mp3,script,
+Age_Ask_V2,clips/pitches/Age_Ask_V2.mp3,script,
+Age_Ask_V3,clips/pitches/Age_Ask_V3.mp3,script,
+Medicare_Status_V1,clips/pitches/Medicare_Status_V1.mp3,script,
+Medicare_Status_V2,clips/pitches/Medicare_Status_V2.mp3,script,
+Medicare_Status_V3,clips/pitches/Medicare_Status_V3.mp3,script,
+Medicare_Parts_Confirmation_V1,clips/pitches/Medicare_Parts_Confirmation_V1.mp3,script,
+Medicare_Parts_Confirmation_V2,clips/pitches/Medicare_Parts_Confirmation_V2.mp3,script,
+Medicare_Parts_Confirmation_V3,clips/pitches/Medicare_Parts_Confirmation_V3.mp3,script,
+Current_Plan_V1,clips/pitches/Current_Plan_V1.mp3,script,
+Current_Plan_V2,clips/pitches/Current_Plan_V2.mp3,script,
+Current_Plan_V3,clips/pitches/Current_Plan_V3.mp3,script,
+Coverage_Satisfaction_V1,clips/pitches/Coverage_Satisfaction_V1.mp3,script,
+Coverage_Satisfaction_V2,clips/pitches/Coverage_Satisfaction_V2.mp3,script,
+Coverage_Satisfaction_V3,clips/pitches/Coverage_Satisfaction_V3.mp3,script,
+Monthly_Premium_V1,clips/pitches/Monthly_Premium_V1.mp3,script,
+Monthly_Premium_V2,clips/pitches/Monthly_Premium_V2.mp3,script,
+Monthly_Premium_V3,clips/pitches/Monthly_Premium_V3.mp3,script,
+Prescription_Coverage_V1,clips/pitches/Prescription_Coverage_V1.mp3,script,
+Prescription_Coverage_V2,clips/pitches/Prescription_Coverage_V2.mp3,script,
+Prescription_Coverage_V3,clips/pitches/Prescription_Coverage_V3.mp3,script,
+Doctor_Network_V1,clips/pitches/Doctor_Network_V1.mp3,script,
+Doctor_Network_V2,clips/pitches/Doctor_Network_V2.mp3,script,
+Doctor_Network_V3,clips/pitches/Doctor_Network_V3.mp3,script,
+Dental_Vision_Hearing_V1,clips/pitches/Dental_Vision_Hearing_V1.mp3,script,
+Dental_Vision_Hearing_V2,clips/pitches/Dental_Vision_Hearing_V2.mp3,script,
+Dental_Vision_Hearing_V3,clips/pitches/Dental_Vision_Hearing_V3.mp3,script,
+Additional_Coverage_V1,clips/pitches/Additional_Coverage_V1.mp3,script,
+Additional_Coverage_V2,clips/pitches/Additional_Coverage_V2.mp3,script,
+Additional_Coverage_V3,clips/pitches/Additional_Coverage_V3.mp3,script,
+Out_Of_Pocket_Costs_V1,clips/pitches/Out_Of_Pocket_Costs_V1.mp3,script,
+Out_Of_Pocket_Costs_V2,clips/pitches/Out_Of_Pocket_Costs_V2.mp3,script,
+Out_Of_Pocket_Costs_V3,clips/pitches/Out_Of_Pocket_Costs_V3.mp3,script,
+Benefits_Review_V1,clips/pitches/Benefits_Review_V1.mp3,script,
+Benefits_Review_V2,clips/pitches/Benefits_Review_V2.mp3,script,
+Benefits_Review_V3,clips/pitches/Benefits_Review_V3.mp3,script,
+Licensed_Agent_Transfer_V1,clips/pitches/Licensed_Agent_Transfer_V1.mp3,transfer,
+Licensed_Agent_Transfer_V2,clips/pitches/Licensed_Agent_Transfer_V2.mp3,transfer,
+Licensed_Agent_Transfer_V3,clips/pitches/Licensed_Agent_Transfer_V3.mp3,transfer,
+Closing_Pitch_V1,clips/pitches/Closing_Pitch_V1.mp3,closing,
+Closing_Pitch_V2,clips/pitches/Closing_Pitch_V2.mp3,closing,
+Closing_Pitch_V3,clips/pitches/Closing_Pitch_V3.mp3,closing,
+Rebuttal_Already_Have_Insurance_Answer_V1,clips/rebuttals/Rebuttal_Already_Have_Insurance_Answer_V1.mp3,rebuttal,"already have,have insurance,covered,have coverage"
+Rebuttal_Already_Have_Insurance_Answer_V2,clips/rebuttals/Rebuttal_Already_Have_Insurance_Answer_V2.mp3,rebuttal,"already have,have insurance,covered,have coverage"
+Rebuttal_Already_Have_Insurance_Answer_V3,clips/rebuttals/Rebuttal_Already_Have_Insurance_Answer_V3.mp3,rebuttal,"already have,have insurance,covered,have coverage"
+Rebuttal_Not_Interested_Answer_V1,clips/rebuttals/Rebuttal_Not_Interested_Answer_V1.mp3,rebuttal,"not interested,no thanks,don't want"
+Rebuttal_Not_Interested_Answer_V2,clips/rebuttals/Rebuttal_Not_Interested_Answer_V2.mp3,rebuttal,"not interested,no thanks,don't want"
+Rebuttal_Not_Interested_Answer_V3,clips/rebuttals/Rebuttal_Not_Interested_Answer_V3.mp3,rebuttal,"not interested,no thanks,don't want"
+Rebuttal_Busy_Right_Now_Answer_V1,clips/rebuttals/Rebuttal_Busy_Right_Now_Answer_V1.mp3,rebuttal,"busy,call back,later,bad time,driving,at work"
+Rebuttal_Busy_Right_Now_Answer_V2,clips/rebuttals/Rebuttal_Busy_Right_Now_Answer_V2.mp3,rebuttal,"busy,call back,later,bad time,driving,at work"
+Rebuttal_Busy_Right_Now_Answer_V3,clips/rebuttals/Rebuttal_Busy_Right_Now_Answer_V3.mp3,rebuttal,"busy,call back,later,bad time,driving,at work"
+Rebuttal_Send_Information_Answer_V1,clips/rebuttals/Rebuttal_Send_Information_Answer_V1.mp3,rebuttal,"send,mail,email,information,brochure"
+Rebuttal_Send_Information_Answer_V2,clips/rebuttals/Rebuttal_Send_Information_Answer_V2.mp3,rebuttal,"send,mail,email,information,brochure"
+Rebuttal_Send_Information_Answer_V3,clips/rebuttals/Rebuttal_Send_Information_Answer_V3.mp3,rebuttal,"send,mail,email,information,brochure"
+Rebuttal_Happy_With_Current_Plan_Answer_V1,clips/rebuttals/Rebuttal_Happy_With_Current_Plan_Answer_V1.mp3,rebuttal,"happy,satisfied,like my plan,good plan"
+Rebuttal_Happy_With_Current_Plan_Answer_V2,clips/rebuttals/Rebuttal_Happy_With_Current_Plan_Answer_V2.mp3,rebuttal,"happy,satisfied,like my plan,good plan"
+Rebuttal_Happy_With_Current_Plan_Answer_V3,clips/rebuttals/Rebuttal_Happy_With_Current_Plan_Answer_V3.mp3,rebuttal,"happy,satisfied,like my plan,good plan"
+Rebuttal_Dont_Change_My_Plan_Answer_V1,clips/rebuttals/Rebuttal_Dont_Change_My_Plan_Answer_V1.mp3,rebuttal,"change,switch,keep my plan"
+Rebuttal_Dont_Change_My_Plan_Answer_V2,clips/rebuttals/Rebuttal_Dont_Change_My_Plan_Answer_V2.mp3,rebuttal,"change,switch,keep my plan"
+Rebuttal_Dont_Change_My_Plan_Answer_V3,clips/rebuttals/Rebuttal_Dont_Change_My_Plan_Answer_V3.mp3,rebuttal,"change,switch,keep my plan"
+Rebuttal_Is_This_A_Scam_Answer_V1,clips/rebuttals/Rebuttal_Is_This_A_Scam_Answer_V1.mp3,rebuttal,"scam,fraud,real,legit,legitimate,trust"
+Rebuttal_Is_This_A_Scam_Answer_V2,clips/rebuttals/Rebuttal_Is_This_A_Scam_Answer_V2.mp3,rebuttal,"scam,fraud,real,legit,legitimate,trust"
+Rebuttal_Is_This_A_Scam_Answer_V3,clips/rebuttals/Rebuttal_Is_This_A_Scam_Answer_V3.mp3,rebuttal,"scam,fraud,real,legit,legitimate,trust"
+Rebuttal_How_Did_You_Get_My_Number_Answer_V1,clips/rebuttals/Rebuttal_How_Did_You_Get_My_Number_Answer_V1.mp3,rebuttal,"my number,get my number,how did you,who gave"
+Rebuttal_How_Did_You_Get_My_Number_Answer_V2,clips/rebuttals/Rebuttal_How_Did_You_Get_My_Number_Answer_V2.mp3,rebuttal,"my number,get my number,how did you,who gave"
+Rebuttal_How_Did_You_Get_My_Number_Answer_V3,clips/rebuttals/Rebuttal_How_Did_You_Get_My_Number_Answer_V3.mp3,rebuttal,"my number,get my number,how did you,who gave"
+Rebuttal_Have_Medicare_Advantage_Answer_V1,clips/rebuttals/Rebuttal_Have_Medicare_Advantage_Answer_V1.mp3,rebuttal,"advantage,part c"
+Rebuttal_Have_Medicare_Advantage_Answer_V2,clips/rebuttals/Rebuttal_Have_Medicare_Advantage_Answer_V2.mp3,rebuttal,"advantage,part c"
+Rebuttal_Have_Medicare_Advantage_Answer_V3,clips/rebuttals/Rebuttal_Have_Medicare_Advantage_Answer_V3.mp3,rebuttal,"advantage,part c"
+Rebuttal_Have_Original_Medicare_Answer_V1,clips/rebuttals/Rebuttal_Have_Original_Medicare_Answer_V1.mp3,rebuttal,"original medicare,part a,part b"
+Rebuttal_Have_Original_Medicare_Answer_V2,clips/rebuttals/Rebuttal_Have_Original_Medicare_Answer_V2.mp3,rebuttal,"original medicare,part a,part b"
+Rebuttal_Have_Original_Medicare_Answer_V3,clips/rebuttals/Rebuttal_Have_Original_Medicare_Answer_V3.mp3,rebuttal,"original medicare,part a,part b"
+Rebuttal_Dont_Pay_Anything_Answer_V1,clips/rebuttals/Rebuttal_Dont_Pay_Anything_Answer_V1.mp3,rebuttal,"don't pay,pay nothing,free,zero premium"
+Rebuttal_Dont_Pay_Anything_Answer_V2,clips/rebuttals/Rebuttal_Dont_Pay_Anything_Answer_V2.mp3,rebuttal,"don't pay,pay nothing,free,zero premium"
+Rebuttal_Dont_Pay_Anything_Answer_V3,clips/rebuttals/Rebuttal_Dont_Pay_Anything_Answer_V3.mp3,rebuttal,"don't pay,pay nothing,free,zero premium"
+Rebuttal_Dont_Give_Personal_Information_Answer_V1,clips/rebuttals/Rebuttal_Dont_Give_Personal_Information_Answer_V1.mp3,rebuttal,"personal information,social security,ssn,date of birth,private"
+Rebuttal_Dont_Give_Personal_Information_Answer_V2,clips/rebuttals/Rebuttal_Dont_Give_Personal_Information_Answer_V2.mp3,rebuttal,"personal information,social security,ssn,date of birth,private"
+Rebuttal_Dont_Give_Personal_Information_Answer_V3,clips/rebuttals/Rebuttal_Dont_Give_Personal_Information_Answer_V3.mp3,rebuttal,"personal information,social security,ssn,date of birth,private"
+Rebuttal_Ask_Family_Answer_V1,clips/rebuttals/Rebuttal_Ask_Family_Answer_V1.mp3,rebuttal,"son,daughter,wife,husband,family,kids,ask"
+Rebuttal_Ask_Family_Answer_V2,clips/rebuttals/Rebuttal_Ask_Family_Answer_V2.mp3,rebuttal,"son,daughter,wife,husband,family,kids,ask"
+Rebuttal_Ask_Family_Answer_V3,clips/rebuttals/Rebuttal_Ask_Family_Answer_V3.mp3,rebuttal,"son,daughter,wife,husband,family,kids,ask"
+Rebuttal_Already_Spoke_To_Agent_Answer_V1,clips/rebuttals/Rebuttal_Already_Spoke_To_Agent_Answer_V1.mp3,rebuttal,"spoke,talked,agent,already called"
+Rebuttal_Already_Spoke_To_Agent_Answer_V2,clips/rebuttals/Rebuttal_Already_Spoke_To_Agent_Answer_V2.mp3,rebuttal,"spoke,talked,agent,already called"
+Rebuttal_Already_Spoke_To_Agent_Answer_V3,clips/rebuttals/Rebuttal_Already_Spoke_To_Agent_Answer_V3.mp3,rebuttal,"spoke,talked,agent,already called"
+Rebuttal_Dont_Take_Medications_Answer_V1,clips/rebuttals/Rebuttal_Dont_Take_Medications_Answer_V1.mp3,rebuttal,"medication,medicine,prescription,pills,drugs"
+Rebuttal_Dont_Take_Medications_Answer_V2,clips/rebuttals/Rebuttal_Dont_Take_Medications_Answer_V2.mp3,rebuttal,"medication,medicine,prescription,pills,drugs"
+Rebuttal_Dont_Take_Medications_Answer_V3,clips/rebuttals/Rebuttal_Dont_Take_Medications_Answer_V3.mp3,rebuttal,"medication,medicine,prescription,pills,drugs"
+Rebuttal_Dont_Need_Dental_Answer_V1,clips/rebuttals/Rebuttal_Dont_Need_Dental_Answer_V1.mp3,rebuttal,"dental,teeth,dentures,vision,hearing"
+Rebuttal_Dont_Need_Dental_Answer_V2,clips/rebuttals/Rebuttal_Dont_Need_Dental_Answer_V2.mp3,rebuttal,"dental,teeth,dentures,vision,hearing"
+Rebuttal_Dont_Need_Dental_Answer_V3,clips/rebuttals/Rebuttal_Dont_Need_Dental_Answer_V3.mp3,rebuttal,"dental,teeth,dentures,vision,hearing"
+Rebuttal_Is_It_Free_Answer_V1,clips/rebuttals/Rebuttal_Is_It_Free_Answer_V1.mp3,rebuttal,"free,cost,charge,how much,price"
+Rebuttal_Is_It_Free_Answer_V2,clips/rebuttals/Rebuttal_Is_It_Free_Answer_V2.mp3,rebuttal,"free,cost,charge,how much,price"
+Rebuttal_Is_It_Free_Answer_V3,clips/rebuttals/Rebuttal_Is_It_Free_Answer_V3.mp3,rebuttal,"free,cost,charge,how much,price"
+Rebuttal_Called_Before_Answer_V1,clips/rebuttals/Rebuttal_Called_Before_Answer_V1.mp3,rebuttal,"called before,keep calling,again,already called"
+Rebuttal_Called_Before_Answer_V2,clips/rebuttals/Rebuttal_Called_Before_Answer_V2.mp3,rebuttal,"called before,keep calling,again,already called"
+Rebuttal_Called_Before_Answer_V3,clips/rebuttals/Rebuttal_Called_Before_Answer_V3.mp3,rebuttal,"called before,keep calling,again,already called"
+Rebuttal_Not_Eligible_Answer_V1,clips/rebuttals/Rebuttal_Not_Eligible_Answer_V1.mp3,rebuttal,"eligible,qualify,too young,not 65,disability"
+Rebuttal_Not_Eligible_Answer_V2,clips/rebuttals/Rebuttal_Not_Eligible_Answer_V2.mp3,rebuttal,"eligible,qualify,too young,not 65,disability"
+Rebuttal_Not_Eligible_Answer_V3,clips/rebuttals/Rebuttal_Not_Eligible_Answer_V3.mp3,rebuttal,"eligible,qualify,too young,not 65,disability"
+Rebuttal_Remove_Me_From_List_Answer_V1,clips/rebuttals/Rebuttal_Remove_Me_From_List_Answer_V1.mp3,rebuttal,"remove,stop calling,do not call,take me off,list"
+Rebuttal_Remove_Me_From_List_Answer_V2,clips/rebuttals/Rebuttal_Remove_Me_From_List_Answer_V2.mp3,rebuttal,"remove,stop calling,do not call,take me off,list"
+Rebuttal_Remove_Me_From_List_Answer_V3,clips/rebuttals/Rebuttal_Remove_Me_From_List_Answer_V3.mp3,rebuttal,"remove,stop calling,do not call,take me off,list"
