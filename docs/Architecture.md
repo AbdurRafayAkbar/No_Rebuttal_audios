@@ -16,7 +16,7 @@ Two processes on a Linux server, sharing one MySQL server (existing `call_data` 
                     │   3. Deepgram STT  ───────────────────────────────►  Deepgram API (HTTPS)    │
                     │   4. cache transcript JSON ──► disk: data/transcripts/<audio_id>.json        │
                     │   5. bot speaker + clip matching  ◄── MySQL: rebuttal_clips                  │
-                    │   6. question rules + LLM judge  ─────────────────►  Owner LLM API (HTTPS)   │
+                    │   6. question rules + LLM judge  ─────────────────►  gpt-oss-120b (SGLang)   │
                     │   7. write candidates ──► MySQL: temporary_no_rebuttal_audios                │
                     │   8. write run stats   ──► MySQL: processing_runs, processed_audios          │
                     │                                                                              │
@@ -37,7 +37,7 @@ Two processes on a Linux server, sharing one MySQL server (existing `call_data` 
 | DB access | SQLAlchemy 2.x + PyMySQL | Mature MySQL support. |
 | Migrations | Alembic | Versioned schema for our new tables only. |
 | Fuzzy matching | rapidfuzz | Fast text similarity for clip matching and question grouping. |
-| LLM judge | Owner-provided LLM (provider TBD), JSON output | Decides whether the bot clip answers the customer question. |
+| LLM judge | Self-hosted `gpt-oss-120b` (SGLang, OpenAI-compatible API, 32k context) via `openai` SDK, JSON output | Decides whether the bot clip answers the customer question. |
 | Web | FastAPI + Jinja2 + HTMX | Server-rendered, no JS build step, easy to maintain. |
 | Auth | Session cookie, bcrypt password hashes | Small team, LAN only. |
 | Config | pydantic-settings + `.env` | Secrets out of git. |

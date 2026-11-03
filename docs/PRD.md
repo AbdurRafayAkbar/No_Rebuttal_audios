@@ -77,5 +77,5 @@ Every day, automatically analyze all call recordings of that day, find customer 
 4. Rebuttal clip files per campaign, with names that tell us their type (script / rebuttal / fallback / closing).
 5. Server time zone and preferred run time.
 6. Port and hostname for the review page inside the office network.
-7. LLM provider, model name, endpoint and rate limits.
+7. ~~LLM provider, model name~~ Answered: `gpt-oss-120b` on SGLang. Open: endpoint URL, API key, rate limits.
 8. ~~Server OS~~ Linux (confirmed). Medicare clip audio is in `campaigns/medicare/clips/`. Still open: where the Medicare call recordings are stored.

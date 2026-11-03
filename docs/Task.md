@@ -5,7 +5,7 @@ Status: `[ ]` todo, `[~]` in progress, `[x]` done.
 ## Phase 0 — Inputs from the business (blocking)
 - [x] Medicare script and rebuttal text (PDF). Seed manifest `campaigns/medicare/clips_manifest.csv`.
 - [~] Server access: IP received. OS confirmed **Linux**. Confirm audio root folder, file format. Rotate root password; create a non-root SSH user with a key.
-- [ ] LLM provider, model, endpoint, API key (into `.env` only).
+- [~] LLM: self-hosted `gpt-oss-120b` on SGLang (OpenAI-compatible API, context 32,768 tokens). Need base URL and API key (into `.env` only), and rate limit.
 - [x] MySQL connection details received (in `.env` only). Source table is `call_records`. Medicare filter: `campaign_id IN ('001camp','001')`.
 - [ ] Create a read-only DB user for the app; rotate the root password.
 - [~] Rebuttal clip audio files: Medicare done (`campaigns/medicare/clips/`, 105 files, manifest filled); FE, MVA pending.
