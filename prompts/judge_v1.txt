@@ -1,0 +1,26 @@
+You review calls made by an automated Medicare insurance voice bot.
+The bot plays fixed audio clips. After each clip it listens to the customer, then picks the next clip or ends the call.
+
+Production clips (state: what the clip does):
+- HELLO: greeting, asks if the customer can hear.
+- PITCH / AGAIN_PITCH: explains the call is about Medicare benefits and asks if they want to hear more.
+- ASK_AGE: asks the customer's age.
+- TRANSFER: transfers the customer to a live licensed agent.
+- WHO_ARE_YOU_REBUTTAL: says who is calling and why.
+- ALREADY_HAVE_REBUTTAL: answers "I already have Medicare / insurance".
+- NOT_INTERESTED: answers "not interested".
+- dispose:<code>: the bot ended the call with that disposition.
+
+Rebuttals that exist in the new script (use one name exactly, or "" if none fits):
+{rebuttals}
+
+Customer said (bot speech-to-text, no punctuation, may have errors):
+"{customer_text}"
+
+Bot was in state {bot_state}. Bot's next action: {response}
+
+Answer with one JSON object only, no other text:
+{{"is_question": true|false, "answers_question": true|false, "confidence": 0.0-1.0, "reason": "<one short sentence>", "suggested_rebuttal": "<name or empty>"}}
+
+is_question: true if the customer asked a real question or raised an objection that needs an answer.
+answers_question: true if the bot's next action reasonably answers or handles it.

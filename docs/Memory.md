@@ -33,7 +33,10 @@ Project decision log and context. Newest entries at the top of each section.
 | D18 | Campaign filter is `call_records.campaign_id` (owner decision 2026-11-04). Medicare = `001camp` (primetech) + `001` (futuretell); FE = `bot_camp`, `BOT_CAMP` (fahad); MVA = `009`, `bot2closer` (corvus) | Mapping confirmed from bot logs: voice folders `*/med/*`, `*/fe/*`, `*/mva/*`. Other values (`006`, `EzyTransfer` = vehicle, `1001` = aca/fe, `inbound`) are out of scope. |
 | D19 | Deepgram fetches `audio_url` directly (owner decision 2026-11-04); no local download | Simpler; no disk use. Review page streams through a proxy. |
 | D20 | The clip files in `campaigns/<campaign>/clips/` are the reference set (owner confirmed correct). The live bot voice folders and the existing `cx_unanswered_asks` feature are not touched; this project is a separate alternative | Owner decision 2026-11-04. Matching uses transcript text, so it does not depend on the bot's own clip file names (`Hello.wav`, `Pitch_AL_afternoon.wav`). |
+| D23 | Zero changes on the call-data server. The app only runs `SELECT` there (session forced `READ ONLY`). No new tables, users, grants or settings on that server. Our own tables live in a separate app database (not on the call-data server) | Owner instruction 2026-11-04: "dont change anything in the server". Supersedes the read-only DB user part of D17. |
 | D22 | LLM judge = self-hosted `gpt-oss-120b` served by SGLang, OpenAI-compatible `/v1/chat/completions`, max context 32,768 tokens. Client uses the `openai` Python SDK with a custom `base_url` | Owner-provided 2026-11-04. Prompt per candidate is small (question, clip text, 2 turns of context), far below the context limit. |
+| D24 | MVP is log-first: detection reads the bot's own log (state, STT text, intent, next state, disposition per turn) instead of transcribing the call audio. Deepgram only later, for flagged calls | Logs already hold Deepgram STT per turn, so no audio cost and fast runs (owner has no spare budget for full-day transcription). Bot logs hold the caller number, so they are read in memory and never saved. |
+| D25 | App DB for MVP = SQLite file `data/nra.db`, schema versioned with `PRAGMA user_version`, not Alembic | One-process daily job, no server needed, nothing written to the call-data server (D23). Move to Postgres/MySQL app DB when the review page needs multi-user writes. |
 | D21 | Medicare clip check (2026-11-04): 105 files, all MP3 24 kHz mono 48 kbps, 5.1–16.4 s, no duplicates, no clipping (peak max -1.4 dB), mean level -26.7 to -18.1 dB, leading silence at most 0.57 s | Clips are usable as is; no re-encode needed. |
 
 ## Open questions
@@ -43,6 +46,8 @@ Project decision log and context. Newest entries at the top of each section.
 - Server time zone, run time, review page port.
 
 ## Changelog
+- 2026-11-04: Daily pipeline MVP (`python -m nra run`), log-first detection (D24), SQLite app DB (D25).
+- 2026-11-04: D23: no changes on the call-data server; own tables move to a separate app DB.
 - 2026-11-04: LLM confirmed: `gpt-oss-120b` on SGLang (D22).
 - 2026-11-04: Campaign filter by `campaign_id` (D18), Deepgram reads URL directly (D19), existing bot/feature untouched (D20), Medicare clip check (D21).
 - 2026-11-03: Call data DB explored (read only). Source table `call_records`; audio in object storage; D6 corrected; D17 added.

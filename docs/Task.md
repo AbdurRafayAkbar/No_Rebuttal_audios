@@ -7,13 +7,23 @@ Status: `[ ]` todo, `[~]` in progress, `[x]` done.
 - [~] Server access: IP received. OS confirmed **Linux**. Confirm audio root folder, file format. Rotate root password; create a non-root SSH user with a key.
 - [~] LLM: self-hosted `gpt-oss-120b` on SGLang (OpenAI-compatible API, context 32,768 tokens). Need base URL and API key (into `.env` only), and rate limit.
 - [x] MySQL connection details received (in `.env` only). Source table is `call_records`. Medicare filter: `campaign_id IN ('001camp','001')`.
-- [ ] Create a read-only DB user for the app; rotate the root password.
+- [-] ~~Create a read-only DB user~~ Cancelled (D23: no server changes). App enforces `SET SESSION TRANSACTION READ ONLY` on every connection instead.
+- [ ] Choose host and engine for the separate app DB (our own tables).
+- [~] Deepgram API key in `.env`: done. LLM base URL into `.env` (no API key needed).
 - [~] Rebuttal clip audio files: Medicare done (`campaigns/medicare/clips/`, 105 files, manifest filled); FE, MVA pending.
 - [ ] Clip manifest CSV per campaign: `clip_file, clip_type, topic_keywords`.
 - [ ] Bot script per campaign (order of script questions).
 - [ ] 20 sample calls per campaign, including some known no-rebuttal calls, for testing.
 - [ ] Objection phrase list per campaign (start list in rules.md, extend with business).
 - [ ] Confirm call language(s), server time zone, run time, review page port.
+
+## Progress 2026-11-04 — MVP daily pipeline (log-first)
+- [x] `nra run --date` / `nra report`: fetch day of Medicare calls (read-only), parse bot logs, rules, SQLite app DB, HTML + CSV report.
+- [x] 14 unit tests (detect, parse, day range).
+- [x] Sample run 2026-11-03: 400 calls, 16 flagged after tuning.
+- [ ] LLM judge live (need `LLM_ENDPOINT` in `.env`).
+- [ ] Deepgram re-transcribe of flagged calls only (`--transcribe`), if bot STT text is not good enough.
+- [ ] systemd timer on Linux host.
 
 ## Phase 1 — Project setup
 - [ ] git init, `.gitignore`, `.env.example`, `pyproject.toml`, README; push to GitHub `main`.

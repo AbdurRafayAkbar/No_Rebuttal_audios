@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-Two processes on a Linux server, sharing one MySQL server (existing `call_data` database, read only, plus our own tables):
+Two processes on a Linux server, reading the existing `call_data` MySQL server (`SELECT` only, no changes there) and writing to a separate app database that holds our own tables (D23):
 
 1. **Nightly analyzer** (`nra run-daily`) — started by a systemd timer (or cron).
 2. **Review web app** (`nra serve`) — FastAPI app running as a systemd service.
@@ -15,10 +15,10 @@ Two processes on a Linux server, sharing one MySQL server (existing `call_data` 
                     │   2. fetch audio  ◄──── Hetzner object storage (audio_url, WAV, HTTPS)       │
                     │   3. Deepgram STT  ───────────────────────────────►  Deepgram API (HTTPS)    │
                     │   4. cache transcript JSON ──► disk: data/transcripts/<audio_id>.json        │
-                    │   5. bot speaker + clip matching  ◄── MySQL: rebuttal_clips                  │
+                    │   5. bot speaker + clip matching  ◄── app DB: rebuttal_clips                 │
                     │   6. question rules + LLM judge  ─────────────────►  gpt-oss-120b (SGLang)   │
-                    │   7. write candidates ──► MySQL: temporary_no_rebuttal_audios                │
-                    │   8. write run stats   ──► MySQL: processing_runs, processed_audios          │
+                    │   7. write candidates ──► app DB: temporary_no_rebuttal_audios               │
+                    │   8. write run stats   ──► app DB: processing_runs, processed_audios         │
                     │                                                                              │
  Reviewer browser ─►│  nra serve (FastAPI + Jinja2 + HTMX, port 8080)                              │
    (LAN, login)     │   - list / filter / group candidates                                         │
@@ -69,6 +69,17 @@ nra/
 ```
 
 ## 4. Data flow per call
+
+### 4a. MVP (built, log-first, see Memory D24)
+
+1. **Select.** `nra.source` runs one parameterized `SELECT id, start_time, end_time, campaign_id, audio_url, log_url, disposition` on `call_records` for the day (RUN_TZ midnight to midnight, converted to UTC) and `campaign_id IN (campaign values)`. Session is `READ ONLY`. Ids already `done` in the app DB are skipped.
+2. **Fetch log.** `nra.botlog` downloads the call `log_url` (prefix-checked, max 5 MB) into memory. The log is not saved.
+3. **Parse.** Per turn: bot state + audio, customer STT text and timing, intent, next state or disposition.
+4. **Detect.** `nra.detect` applies the Q-* and R-* rules (rules.md) and suggests a rebuttal from the manifest keywords.
+5. **Judge (optional).** If `LLM_ENDPOINT` is set, `nra.llm` asks the LLM per candidate; verdicts are cached by question key.
+6. **Persist + report.** SQLite `data/nra.db` (`processed_audios`, `candidates`, `llm_verdicts`, `processing_runs`); `nra.report` writes the daily HTML + CSV.
+
+### 4b. Full design (audio transcription, later)
 
 1. **Select.** `selector` reads the existing `call_records` table for the target date and excludes ids in `processed_audios` with `status='done'`.
 2. **Transcribe.** If `data/transcripts/<audio_id>.json` exists, reuse it. Otherwise send the call `audio_url` to Deepgram (Deepgram fetches the WAV directly; no local download) with `model=nova-3, diarize=true, punctuate=true, smart_format=true, utterances=true`. Save the raw JSON.
