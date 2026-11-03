@@ -19,7 +19,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name in ("run", "report"):
         p = sub.add_parser(name)
-        p.add_argument("--date", type=date.fromisoformat, help="call date in RUN_TZ (default: yesterday)")
+        p.add_argument("--date", type=date.fromisoformat, help="shift start date in RUN_TZ (default: yesterday)")
         p.add_argument("--campaign", default="MEDICARE")
     r = sub.choices["run"]
     r.add_argument("--limit", type=int, help="process at most N calls (for testing)")
@@ -40,6 +40,9 @@ def main(argv: list[str] | None = None) -> int:
               f"{counts['candidates']} candidates, {counts['dismissed']} dismissed by LLM "
               f"(LLM {'on' if counts['llm'] else 'off'})")
     conn = store.open_db(settings.db_path)
-    html_path, csv_path, n = report.write_reports(conn, settings.data_dir / "reports", day.isoformat(), campaign.code)
+    s_utc, e_utc = pipeline.day_range_utc(day, settings.run_tz, settings.shift_start, settings.shift_end)
+    label = f"{day.isoformat()} {settings.shift_start} to {settings.shift_end} {settings.run_tz}"
+    html_path, csv_path, n = report.write_reports(conn, settings.data_dir / "reports", day.isoformat(),
+                                                  campaign.code, str(s_utc), str(e_utc), label)
     print(f"report: {n} flagged -> {html_path}\n        {csv_path}")
     return 0

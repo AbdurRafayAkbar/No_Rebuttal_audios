@@ -72,7 +72,7 @@ nra/
 
 ### 4a. MVP (built, log-first, see Memory D24)
 
-1. **Select.** `nra.source` runs one parameterized `SELECT id, start_time, end_time, campaign_id, audio_url, log_url, disposition` on `call_records` for the day (RUN_TZ midnight to midnight, converted to UTC) and `campaign_id IN (campaign values)`. Session is `READ ONLY`. Ids already `done` in the app DB are skipped.
+1. **Select.** `nra.source` runs one parameterized `SELECT id, start_time, end_time, campaign_id, audio_url, log_url, disposition` on `call_records` for one shift (`SHIFT_START` on the date to `SHIFT_END` next day in `RUN_TZ`, default 18:00 to 04:00 Asia/Karachi, converted to UTC) and `campaign_id IN (campaign values)`. Session is `READ ONLY`. Ids already `done` in the app DB are skipped.
 2. **Fetch log.** `nra.botlog` downloads the call `log_url` (prefix-checked, max 5 MB) into memory. The log is not saved.
 3. **Parse.** Per turn: bot state + audio, customer STT text and timing, intent, next state or disposition.
 4. **Detect.** `nra.detect` applies the Q-* and R-* rules (rules.md) and suggests a rebuttal from the manifest keywords.

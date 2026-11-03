@@ -129,6 +129,13 @@ def test_day_range_utc_new_york():
     assert s == datetime(2026, 11, 3, 5, 0) and e == datetime(2026, 11, 4, 5, 0)
 
 
+def test_shift_range_pakistan():
+    from datetime import date, datetime
+    from nra.pipeline import day_range_utc
+    s, e = day_range_utc(date(2026, 11, 2), "Asia/Karachi", "18:00", "04:00")  # Mon 6 pm to Tue 4 am PKT
+    assert s == datetime(2026, 11, 2, 13, 0) and e == datetime(2026, 11, 2, 23, 0)
+
+
 def test_phatic_questions_ignored():
     log = botlog.parse_log(_log(("HELLO", "Hello.wav", "hello hi can you hear me okay yeah", "GREETING",
                                  _nxt("PITCH")),

@@ -37,6 +37,7 @@ Project decision log and context. Newest entries at the top of each section.
 | D22 | LLM judge = self-hosted `gpt-oss-120b` served by SGLang, OpenAI-compatible `/v1/chat/completions`, max context 32,768 tokens. Client uses the `openai` Python SDK with a custom `base_url` | Owner-provided 2026-11-04. Prompt per candidate is small (question, clip text, 2 turns of context), far below the context limit. |
 | D24 | MVP is log-first: detection reads the bot's own log (state, STT text, intent, next state, disposition per turn) instead of transcribing the call audio. Deepgram only later, for flagged calls | Logs already hold Deepgram STT per turn, so no audio cost and fast runs (owner has no spare budget for full-day transcription). Bot logs hold the caller number, so they are read in memory and never saved. |
 | D25 | App DB for MVP = SQLite file `data/nra.db`, schema versioned with `PRAGMA user_version`, not Alembic | One-process daily job, no server needed, nothing written to the call-data server (D23). Move to Postgres/MySQL app DB when the review page needs multi-user writes. |
+| D26 | One "day" of calls = one Pakistan shift: 18:00 PKT on the date to 04:00 PKT next day (13:00 to 23:00 UTC). `--date` is the shift start date; default = yesterday in PKT | Owner decision 2026-11-04 ("monday 6 pm to Tuesday 4 am"). Configurable via `RUN_TZ`, `SHIFT_START`, `SHIFT_END`. |
 | D21 | Medicare clip check (2026-11-04): 105 files, all MP3 24 kHz mono 48 kbps, 5.1–16.4 s, no duplicates, no clipping (peak max -1.4 dB), mean level -26.7 to -18.1 dB, leading silence at most 0.57 s | Clips are usable as is; no re-encode needed. |
 
 ## Open questions
@@ -46,7 +47,7 @@ Project decision log and context. Newest entries at the top of each section.
 - Server time zone, run time, review page port.
 
 ## Changelog
-- 2026-11-04: Daily pipeline MVP (`python -m nra run`), log-first detection (D24), SQLite app DB (D25).
+- 2026-11-04: Daily pipeline MVP (`python -m nra run`), log-first detection (D24), SQLite app DB (D25), Pakistan shift window (D26).
 - 2026-11-04: D23: no changes on the call-data server; own tables move to a separate app DB.
 - 2026-11-04: LLM confirmed: `gpt-oss-120b` on SGLang (D22).
 - 2026-11-04: Campaign filter by `campaign_id` (D18), Deepgram reads URL directly (D19), existing bot/feature untouched (D20), Medicare clip check (D21).

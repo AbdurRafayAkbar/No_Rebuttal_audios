@@ -13,15 +13,15 @@ CSV_FIELDS = ["audio_id", "start_time", "turn_no", "customer_text", "bot_state",
               "audio_url", "speech_start"]
 
 
-def _rows(conn: sqlite3.Connection, run_date: str, campaign: str) -> list[dict]:
+def _rows(conn: sqlite3.Connection, run_date: str, campaign: str, start: str, end: str) -> list[dict]:
     q = """
     SELECT c.*, p.start_time, p.audio_url FROM candidates c
     JOIN processed_audios p ON p.audio_id = c.audio_id
-    WHERE c.run_date=? AND c.campaign=? AND c.status='flagged'
+    WHERE c.run_date=? AND c.campaign=? AND c.status='flagged' AND p.start_time >= ? AND p.start_time < ?
     ORDER BY c.confidence DESC, c.audio_id, c.turn_no
     """
     out = []
-    for r in conn.execute(q, (run_date, campaign)):
+    for r in conn.execute(q, (run_date, campaign, start, end)):
         d = dict(r)
         v = json.loads(d["llm_verdict"]) if d["llm_verdict"] else {}
         d["llm_reason"] = v.get("reason", "")
@@ -31,20 +31,23 @@ def _rows(conn: sqlite3.Connection, run_date: str, campaign: str) -> list[dict]:
     return out
 
 
-def _stats(conn, run_date: str, campaign: str) -> dict:
+def _stats(conn, run_date: str, campaign: str, start: str, end: str) -> dict:
+    win = "run_date=? AND campaign=? AND start_time >= ? AND start_time < ?"
     s = {r[0]: r[1] for r in conn.execute(
-        "SELECT status, COUNT(*) FROM processed_audios WHERE run_date=? AND campaign=? GROUP BY status",
-        (run_date, campaign))}
+        f"SELECT status, COUNT(*) FROM processed_audios WHERE {win} GROUP BY status",
+        (run_date, campaign, start, end))}
     s["dismissed_by_llm"] = conn.execute(
-        "SELECT COUNT(*) FROM candidates WHERE run_date=? AND campaign=? AND status='dismissed_by_llm'",
-        (run_date, campaign)).fetchone()[0]
+        "SELECT COUNT(*) FROM candidates c JOIN processed_audios p ON p.audio_id=c.audio_id"
+        " WHERE c.run_date=? AND c.campaign=? AND p.start_time >= ? AND p.start_time < ?"
+        " AND c.status='dismissed_by_llm'", (run_date, campaign, start, end)).fetchone()[0]
     return s
 
 
-def write_reports(conn, out_dir: Path, run_date: str, campaign: str) -> tuple[Path, Path, int]:
+def write_reports(conn, out_dir: Path, run_date: str, campaign: str, start: str = "0000",
+                  end: str = "9999", window_label: str = "") -> tuple[Path, Path, int]:
     out_dir.mkdir(parents=True, exist_ok=True)
-    rows = _rows(conn, run_date, campaign)
-    stats = _stats(conn, run_date, campaign)
+    rows = _rows(conn, run_date, campaign, start, end)
+    stats = _stats(conn, run_date, campaign, start, end)
     base = out_dir / f"{run_date}_{campaign.lower()}"
 
     csv_path = base.with_suffix(".csv")
@@ -79,7 +82,7 @@ h1{{font-size:22px;margin:0 0 4px}} h2{{font-size:17px;margin:28px 0 8px}}
 .tag{{color:var(--hi);font-weight:600}} audio{{width:100%;max-width:420px;margin-top:6px}}
 </style></head><body><main>
 <h1>Unanswered customer questions</h1>
-<div class="mut">{e(campaign)} · calls on {e(run_date)}</div>
+<div class="mut">{e(campaign)} · shift {e(window_label or run_date)}</div>
 <div class="stats">
 <div class="stat"><b>{stats.get('done', 0)}</b>calls analysed</div>
 <div class="stat"><b>{stats.get('no_log', 0)}</b>no bot log</div>

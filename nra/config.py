@@ -49,6 +49,8 @@ class Settings:
     audio_url_prefix: str
     log_url_prefix: str
     run_tz: str
+    shift_start: str
+    shift_end: str
     workers: int
     data_dir: Path
     campaigns: dict[str, Campaign] = field(default_factory=lambda: CAMPAIGNS)
@@ -83,7 +85,9 @@ def load_settings(env_file: Path | None = None) -> Settings:
         llm_api_key=get("LLM_API_KEY"),
         audio_url_prefix=get("AUDIO_URL_PREFIX", "https://hel1.your-objectstorage.com/sd-bucket/"),
         log_url_prefix=get("LOG_URL_PREFIX", "https://hel1.your-objectstorage.com/sd-logs/"),
-        run_tz=get("RUN_TZ", "America/New_York"),
+        run_tz=get("RUN_TZ", "Asia/Karachi"),
+        shift_start=get("SHIFT_START", "18:00"),
+        shift_end=get("SHIFT_END", "04:00"),
         workers=int(get("WORKERS", "16")),
         data_dir=data_dir,
     )

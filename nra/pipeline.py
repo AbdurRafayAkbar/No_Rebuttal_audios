@@ -13,10 +13,13 @@ from .config import Campaign, Settings
 log = logging.getLogger("nra")
 
 
-def day_range_utc(day: date, tz_name: str) -> tuple[datetime, datetime]:
+def day_range_utc(day: date, tz_name: str, shift_start: str = "00:00",
+                  shift_end: str = "00:00") -> tuple[datetime, datetime]:
+    """Shift window for `day` in tz, as naive UTC. End on the next day if end <= start."""
     tz = ZoneInfo(tz_name)
-    start = datetime.combine(day, time.min, tz)
-    end = datetime.combine(day + timedelta(days=1), time.min, tz)
+    s, e = time.fromisoformat(shift_start), time.fromisoformat(shift_end)
+    start = datetime.combine(day, s, tz)
+    end = datetime.combine(day + timedelta(days=1) if e <= s else day, e, tz)
     to_utc = lambda d: d.astimezone(timezone.utc).replace(tzinfo=None)  # noqa: E731
     return to_utc(start), to_utc(end)
 
@@ -37,7 +40,7 @@ def run(settings: Settings, campaign: Campaign, day: date, limit: int | None = N
         workers: int | None = None, force: bool = False, use_llm: bool = True) -> dict:
     conn = store.open_db(settings.db_path)
     run_date = day.isoformat()
-    start_utc, end_utc = day_range_utc(day, settings.run_tz)
+    start_utc, end_utc = day_range_utc(day, settings.run_tz, settings.shift_start, settings.shift_end)
     calls = source.fetch_calls(settings, campaign.source_values, start_utc, end_utc)
     total = len(calls)
     if not force:

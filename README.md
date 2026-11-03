@@ -53,7 +53,7 @@ python -m venv .venv
 cp .env.example .env                 # fill DB_*, optional LLM_ENDPOINT
 ```
 
-Run one day (default: yesterday in `RUN_TZ`):
+Run one shift. A shift is `--date` 18:00 to next day 04:00 Pakistan time (`RUN_TZ`, `SHIFT_START`, `SHIFT_END`). Default date: yesterday in Pakistan time.
 
 ```
 python -m nra run --date 2026-11-03
