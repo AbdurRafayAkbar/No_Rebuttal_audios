@@ -13,3 +13,6 @@ nra = "nra.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+nra = ["web_page.html"]

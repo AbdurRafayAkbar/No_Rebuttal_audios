@@ -1,4 +1,4 @@
-"""Command line: `python -m nra run|report [--date YYYY-MM-DD]`."""
+"""Command line: `python -m nra run|report [--date YYYY-MM-DD]` and `python -m nra serve`."""
 from __future__ import annotations
 
 import argparse
@@ -26,10 +26,16 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--workers", type=int)
     r.add_argument("--force", action="store_true", help="re-process calls already done")
     r.add_argument("--no-llm", action="store_true", help="skip the LLM judge even if configured")
+    sv = sub.add_parser("serve", help="local review page on 127.0.0.1")
+    sv.add_argument("--port", type=int, default=8000)
     args = ap.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     settings = load_settings()
+    if args.cmd == "serve":
+        from . import web
+        web.serve(settings, args.port)
+        return 0
     campaign = settings.campaigns[args.campaign.upper()]
     day = args.date or _yesterday(settings.run_tz)
 

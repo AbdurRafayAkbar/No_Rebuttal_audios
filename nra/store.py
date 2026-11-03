@@ -5,7 +5,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS processing_runs (
@@ -54,6 +54,15 @@ CREATE TABLE IF NOT EXISTS llm_verdicts (
     verdict TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     PRIMARY KEY (prompt_version, question_key, response)
+);
+-- v2: reviewer decisions. Kept apart from candidates so a re-run does not wipe them.
+CREATE TABLE IF NOT EXISTS reviews (
+    audio_id INTEGER NOT NULL,
+    turn_no INTEGER NOT NULL,
+    decision TEXT NOT NULL,                -- approved (real miss) | rejected (false flag)
+    note TEXT,
+    reviewed_at TEXT NOT NULL DEFAULT (datetime('now')),
+    PRIMARY KEY (audio_id, turn_no)
 );
 """
 

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unanswered Questions Review</title>
+<style>
+:root{--bg:#f6f5f1;--fg:#1d1d1b;--mut:#6b6a64;--line:#dcdad2;--card:#fff;--soft:#efede6;
+  --hi:#b4441f;--ok:#2f7a3d;--no:#9b2c2c;--okbg:#e6f2e7;--nobg:#f6e3e3;--focus:#2b5fb4}
+@media (prefers-color-scheme:dark){:root{--bg:#151514;--fg:#ecebe6;--mut:#9b9a93;--line:#34332f;--card:#1e1e1c;
+  --soft:#262624;--hi:#f08a62;--ok:#7cc48a;--no:#ec8b8b;--okbg:#1f3323;--nobg:#3a2222;--focus:#7aa7f0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar,main{max-width:1180px;margin:0 auto;padding:12px 16px}
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:end}
+h1{font-size:18px;margin:0 auto 0 0;align-self:center}
+label{display:flex;flex-direction:column;font-size:12px;color:var(--mut);gap:2px}
+select,input,button{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);
+  border-radius:6px;padding:5px 8px;min-height:32px}
+input[type=search]{width:200px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+a{color:var(--focus)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:4px 0 12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--mut)}
+.stat b{display:block;font-size:22px;color:var(--fg);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chip{border-radius:999px;padding:3px 10px;font-size:13px;min-height:0}
+.chip[aria-pressed=true]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.mut{color:var(--mut)}
+h2{font-size:15px;margin:22px 0 8px;display:flex;gap:8px;align-items:baseline}
+.row{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:8px;
+  padding:10px 12px;margin:8px 0;display:grid;grid-template-columns:1fr auto;gap:6px 12px}
+.row.approved{border-left-color:var(--ok)} .row.rejected{border-left-color:var(--no);opacity:.75}
+.q{font-size:16px;grid-column:1}
+.meta{grid-column:1;color:var(--mut);font-size:13px;word-break:break-word}
+.tag{color:var(--hi);font-weight:600}
+.flow{font-family:ui-monospace,Consolas,monospace;font-size:12px;background:var(--soft);padding:1px 6px;border-radius:4px}
+.acts{grid-column:2;grid-row:1/span 3;display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.acts button{font-size:13px}
+.acts .ok[aria-pressed=true]{background:var(--okbg);color:var(--ok);border-color:var(--ok)}
+.acts .no[aria-pressed=true]{background:var(--nobg);color:var(--no);border-color:var(--no)}
+audio{grid-column:1;width:100%;max-width:440px;height:34px}
+.empty{padding:40px 0;text-align:center;color:var(--mut)}
+.err{color:var(--no)}
+@media (max-width:640px){.row{grid-template-columns:1fr}.acts{grid-column:1;grid-row:auto;flex-direction:row}
+  input[type=search]{width:100%}label.grow{flex:1 1 100%}}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <h1>Unanswered questions</h1>
+  <label>Campaign<select id="campaign"></select></label>
+  <label>Shift<select id="day"></select></label>
+  <label>Review<select id="review">
+    <option value="">All</option><option value="pending">Not reviewed</option>
+    <option value="approved">Real miss</option><option value="rejected">False flag</option>
+  </select></label>
+  <label>Min confidence<select id="conf">
+    <option value="0">Any</option><option value="0.5">0.5+</option><option value="0.7">0.7+</option><option value="0.8">0.8+</option>
+  </select></label>
+  <label>Group by<select id="group">
+    <option value="suggested_rebuttal">Suggested rebuttal</option><option value="r_rule">Rule</option>
+    <option value="bot_state">Bot state</option><option value="none">No grouping</option>
+  </select></label>
+  <label class="grow">Search<input id="q" type="search" placeholder="customer text, call id"></label>
+  <a id="csv" href="#">Export CSV</a>
+</div></header>
+<main>
+  <div id="window" class="mut"></div>
+  <div class="stats" id="stats"></div>
+  <div class="chips" id="rules" aria-label="Filter by rule"></div>
+  <div id="list"></div>
+</main>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const NONE = "No matching rebuttal (new question?)";
+const RULE_HELP = {
+  "R-NR-IGNORED": "Bot went on with the script",
+  "R-NR-HANGUP": "Bot ended the call",
+  "R-NR-OFFTOPIC": "Bot played a rebuttal for another topic",
+  "R-NR-UNKNOWN-STATE": "Bot moved to an unknown state",
+};
+let data = null, ruleFilter = new Set();
+
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v);
+  }
+  for (const k of kids) if (k != null) n.append(k);  // strings become text nodes, never HTML
+  return n;
+}
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
+  return r.json();
+}
+function saveUi() {
+  try { localStorage.setItem("nra-ui", JSON.stringify({review: $("review").value, conf: $("conf").value, group: $("group").value})); } catch {}
+}
+function loadUi() {
+  try { const s = JSON.parse(localStorage.getItem("nra-ui") || "{}");
+    for (const k of ["review", "conf", "group"]) if (s[k] != null) $(k).value = s[k]; } catch {}
+}
+
+async function loadDays() {
+  const res = await api(`/api/days?campaign=${encodeURIComponent($("campaign").value || "MEDICARE")}`);
+  if (!$("campaign").options.length) for (const c of res.campaigns) $("campaign").append(el("option", {value: c}, c));
+  const day = $("day"); day.textContent = "";
+  for (const d of res.days) day.append(el("option", {value: d.date}, `${d.date} (${d.flagged} flagged)`));
+  if (!res.days.length) { $("list").replaceChildren(el("div", {class: "empty"}, "No runs yet. Run: python -m nra run")); return; }
+  const want = new URLSearchParams(location.search).get("date");
+  if (want && res.days.some(d => d.date === want)) day.value = want;
+  await loadDay();
+}
+
+async function loadDay() {
+  const d = $("day").value, c = $("campaign").value;
+  history.replaceState(null, "", `?date=${d}`);
+  $("csv").href = `/api/export.csv?date=${encodeURIComponent(d)}&campaign=${encodeURIComponent(c)}`;
+  $("list").replaceChildren(el("div", {class: "empty"}, "Loading…"));
+  data = await api(`/api/day?date=${encodeURIComponent(d)}&campaign=${encodeURIComponent(c)}`);
+  ruleFilter.clear();
+  render();
+}
+
+function flagged() { return data.items.filter(i => i.status === "flagged"); }
+
+function renderStats() {
+  const s = data.stats, f = flagged();
+  const done = s.done || 0, n = f.length;
+  const ok = f.filter(i => i.decision === "approved").length, no = f.filter(i => i.decision === "rejected").length;
+  const tile = (v, t) => el("div", {class: "stat"}, el("b", {}, String(v)), t);
+  $("window").textContent = `${data.campaign} · shift ${data.window}`;
+  $("stats").replaceChildren(
+    tile(done.toLocaleString(), "calls analysed"),
+    tile(n, `flagged turns${done ? ` (${(100 * n / done).toFixed(1)}%)` : ""}`),
+    tile(n - ok - no, "not reviewed"),
+    tile(ok, "real misses"),
+    tile(no, "false flags"),
+    tile((s.no_log || 0) + (s.failed || 0), "no log / failed"),
+  );
+  const counts = {};
+  for (const i of f) counts[i.r_rule] = (counts[i.r_rule] || 0) + 1;
+  $("rules").replaceChildren(...Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([r, c]) =>
+    el("button", {class: "chip", "aria-pressed": String(ruleFilter.has(r)), title: RULE_HELP[r] || "",
+      onclick: () => { ruleFilter.has(r) ? ruleFilter.delete(r) : ruleFilter.add(r); renderList(); renderStats(); }},
+      `${r} ${c}`)));
+}
+
+function visible() {
+  const rv = $("review").value, min = +$("conf").value, q = $("q").value.trim().toLowerCase();
+  return flagged().filter(i =>
+    (!ruleFilter.size || ruleFilter.has(i.r_rule)) &&
+    i.confidence >= min &&
+    (!rv || (rv === "pending" ? !i.decision : i.decision === rv)) &&
+    (!q || i.customer_text.toLowerCase().includes(q) || String(i.audio_id).includes(q)));
+}
+
+async function setDecision(item, decision, node) {
+  const next = item.decision === decision ? null : decision;  // click again to undo
+  try {
+    await api("/api/review", {method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({audio_id: item.audio_id, turn_no: item.turn_no, decision: next})});
+  } catch (e) { alert(`Save failed: ${e.message}`); return; }
+  item.decision = next;
+  node.replaceWith(rowNode(item));
+  renderStats();
+}
+
+function rowNode(i) {
+  const node = el("div", {class: `row ${i.decision || ""}`});
+  const why = RULE_HELP[i.r_rule] ? ` (${RULE_HELP[i.r_rule]})` : "";
+  node.append(
+    el("div", {class: "q"}, i.customer_text),
+    el("div", {class: "meta"},
+      el("span", {class: "tag", title: why}, i.r_rule), ` · conf ${i.confidence.toFixed(2)} · `,
+      el("span", {class: "flow"}, `${i.bot_state || "?"} → ${i.response || "?"}`),
+      i.repeats > 1 ? ` · asked ${i.repeats}x` : "", i.played ? "" : " · hung up before reply",
+      ` · call ${i.audio_id} turn ${i.turn_no} · ${i.start_local} PKT`,
+      i.suggested_rebuttal ? ` · try ${i.suggested_rebuttal}` : "",
+      i.llm_reason ? ` · LLM: ${i.llm_reason}` : ""),
+    i.audio_url ? el("audio", {controls: "", preload: "none", src: `${i.audio_url}#t=${Math.max(0, (i.speech_start || 0) - 1).toFixed(1)}`})
+                : el("div", {class: "meta"}, "audio link missing"),
+    el("div", {class: "acts"},
+      el("button", {class: "ok", "aria-pressed": String(i.decision === "approved"), title: "Bot really missed this question",
+        onclick: () => setDecision(i, "approved", node)}, "Real miss"),
+      el("button", {class: "no", "aria-pressed": String(i.decision === "rejected"), title: "Not a real question, or bot answered it",
+        onclick: () => setDecision(i, "rejected", node)}, "False flag")));
+  return node;
+}
+
+function renderList() {
+  const items = visible(), key = $("group").value;
+  if (!items.length) { $("list").replaceChildren(el("div", {class: "empty"}, "Nothing matches these filters.")); return; }
+  const groups = new Map();
+  for (const i of items) {
+    const g = key === "none" ? "All flagged turns" : (i[key] || (key === "suggested_rebuttal" ? NONE : "?"));
+    if (!groups.has(g)) groups.set(g, []);
+    groups.get(g).push(i);
+  }
+  const out = [];
+  for (const [g, list] of [...groups].sort((a, b) => b[1].length - a[1].length)) {
+    out.push(el("h2", {}, g, el("span", {class: "mut"}, `${list.length}`)));
+    for (const i of list) out.push(rowNode(i));
+  }
+  $("list").replaceChildren(...out);
+}
+
+function render() { renderStats(); renderList(); }
+
+loadUi();
+for (const id of ["review", "conf", "group"]) $(id).addEventListener("change", () => { saveUi(); data && renderList(); });
+let t; $("q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => data && renderList(), 150); });
+$("day").addEventListener("change", () => loadDay().catch(showErr));
+$("campaign").addEventListener("change", () => loadDays().catch(showErr));
+function showErr(e) { $("list").replaceChildren(el("div", {class: "empty err"}, `Error: ${e.message}`)); }
+loadDays().catch(showErr);
+</script>
+</body>
+</html>

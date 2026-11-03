@@ -66,4 +66,14 @@ Calls already done are skipped; use `--force` to redo them.
 
 The pipeline only runs `SELECT` on the call-data server, in a `READ ONLY` session. Bot logs are read in memory and not saved; only the customer turn text, state and URLs are stored.
 
+## Review page
+
+```
+python -m nra serve            # then open http://127.0.0.1:8000
+```
+
+Pick a shift and filter by rule, confidence, review state or text. Each flagged turn has an audio player that starts just before the question. Mark each one "Real miss" or "False flag"; the decisions go into the `reviews` table in `data/nra.db`, and a re-run does not remove them. "Export CSV" downloads the shift with the decisions.
+
+The server listens on 127.0.0.1 only and rejects requests with any other `Host` header. Do not expose it to the network, because the page shows customer call text.
+
 Tests: `python -m pytest`
